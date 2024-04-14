@@ -25,7 +25,7 @@ app.use(express.static('./src/public')); // middleware para servir archivos estÃ
 // configuracion de la sesion
 app.use(session({
   store: MongoStore.create({
-      mongoUrl: 'mongodb+srv://virnardi1680:BkuCVJ8bXvajdex0@cluster0.4au0cke.mongodb.net/',
+      mongoUrl: 'mongodb+srv://virnardi1680:j4EQBJpAxmecGG7V@cluster0.9qhumxt.mongodb.net/',
       dbName: 'ecommerce'
   }),
   secret: 'secret',
@@ -49,7 +49,7 @@ app.set('view engine', 'handlebars');
 
 // InicializaciÃ³n del servidor
 try {
-    await mongoose.connect('mongodb+srv://virnardi1680:BkuCVJ8bXvajdex0@cluster0.4au0cke.mongodb.net/') // conecta con la base de datos
+    await mongoose.connect('mongodb+srv://virnardi1680:j4EQBJpAxmecGG7V@cluster0.9qhumxt.mongodb.net/') // conecta con la base de datos
     const serverHttp = app.listen(PORT, () => console.log('server up')) // levanta el servidor en el puerto especificado  
     const io = new Server(serverHttp) // instancia de socket.io
     
