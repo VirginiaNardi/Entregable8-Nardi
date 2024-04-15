@@ -53,72 +53,71 @@ const initializePassport = () => {
         return done(error);
       }
     }));
+
     passport.use('login', new localStrategy({
-      usernameField: 'email',
-  }, async (username, password, done) => {
-      try {
+
+        usernameField: 'email',
+  
+        passReqToCallback: true
+  
+      }, async (req, username, password, done) => {
+  
+        try {
+  
           const user = await UserModel.findOne({ email: username });
+  
           if (!user) {
-              return done(null, false, { message: 'Credenciales inválidas.' });
+  
+            return done(null, false, { message: 'Credenciales inválidas.' });
+  
           }
   
           const passwordsMatch = await bcrypt.compareSync(password, user.password);
+  
           if (!passwordsMatch) {
-              return done(null, false, { message: 'Credenciales inválidas.' });
+  
+            return done(null, false, { message: 'Credenciales inválidas.' });
+  
           }
   
           const userSession = {
+  
               _id: user._id,
+  
               first_name: user.first_name,
+  
               last_name: user.last_name,
+  
               email: user.email,
+  
               age: user.age,
+  
               role: user.role
+  
           }
   
-          // Almacenar toda la información del usuario en la sesión
           req.session.user = userSession;
   
-          return done(null, user);
-      } catch (error) {
-          console.log(error.message);
-          return done(error);
-      }
-  }));
+          return done(null, userSession);
   
-    // passport.use('login', new localStrategy({
-    //   usernameField: 'email',
+        } catch (error) {
+  
+          console.log(error.message);
+  
+          return done(error);
+  
+        }
+  
+      }));
+
     // }, async (username, password, done) => {
     //   try {
     //     const user = await UserModel.findOne({ email: username });
-    //     if (!user) {
-    //       return done(null, false, { message: 'Credenciales inválidas.' });
-    //     }
-  
-    //     const passwordsMatch = await bcrypt.compareSync(password, user.password);
-    //     if (!passwordsMatch) {
-    //       return done(null, false, { message: 'Credenciales inválidas.' });
-    //     }
 
-    //     const userSession = {
-    //         _id: user._id,
-    //         first_name: user.first_name,
-    //         last_name: user.last_name,
-    //         email: user.email,
-    //         age: user.age,
-    //         role: user.role
-    //     }
-
-    //     return done(null, user);
-    //   } catch (error) {
-    //     console.log(error.message);
-    //     return done(error);
-    //   }
-    // }));
     
     passport.use('github', new GithubStrategy({
-        clientID: 'Iv1.406a2cb748fca137',
-        clientSecret: '0911404c5380ce804ebe9cbfa5aa7d476ebbdfb7',
+        clientID: 'Iv1.746ff40a5a57694c',
+        clientSecret: 'f4c35d95437177fbfbf6c30b532e31d5573503d7',
         callbackURL: 'http://localhost:8080/api/sessions/githubcallback'
     }, async (accessToken, refreshToken, profile, done) => {
         console.log(profile)

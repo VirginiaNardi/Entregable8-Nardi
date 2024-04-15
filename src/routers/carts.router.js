@@ -55,66 +55,8 @@ router.post('/', async (req, res) => {
   });
 
 
-//   router.post('/:cid/product/:pid', async (req, res) => {
-//     try {
-//         const cartId = req.params.cid;
-//         const productId = req.params.pid;
 
-//         // Obtén el usuario actual
-//         console.log(req.session.user)
-//         const userId = req.session.user && req.session.user._id; // Obtener el ID del usuario de la sesión
-
-//         if (!userId) {
-//             res.status(401).json({ error: 'Usuario no autenticado' });
-//             return;
-//         }
-
-//         const user = await User.findById(userId);
-
-//         const product = await Product.findById(productId).lean().exec();
-
-//         if (!product) {
-//             res.status(404).json({ error: 'Producto no encontrado' });
-//             return;
-//         }
-
-//         const cart = await Cart.findById(cartId).lean().exec();
-
-//         if (!cart) {
-//             res.status(404).json({ error: 'Carrito no encontrado' });
-//             return;
-//         }
-
-//         const existingProductIndex = cart.products.findIndex(
-//             (item) => item.product && item.product.toString() === productId
-//         );
-
-//         if (existingProductIndex !== -1) {
-//             // Si el producto ya está en el carrito, incrementar la cantidad
-//             cart.products[existingProductIndex].quantity++;
-//         } else {
-//             // Si el producto no está en el carrito, agregarlo con cantidad 1
-//             cart.products.push({
-//                 product: productId,
-//                 quantity: 1
-//             });
-//         }
-
-//         await Cart.findByIdAndUpdate(cartId, { products: cart.products }).exec();
-
-//         user.cart.products.push({
-//             product: productId,
-//             quantity: 1
-//         });
-//         await user.save();
-
-//         res.status(201).json(cart);
-//     } catch (error) {
-//         console.log('Error al agregar producto al carrito:', error);
-//         res.status(500).json({ error: 'Error en el servidor' });
-//     }
-// });
-
+  
 router.post('/:cid/product/:pid', async (req, res) => {
     try {
       const cartId = req.params.cid;
@@ -122,7 +64,9 @@ router.post('/:cid/product/:pid', async (req, res) => {
 
       // Obtén el usuario actual
       const userId = req.session.user?._id; // Obtener el ID del usuario de la sesión
-      const user = await User.findById(userId);
+      const user = await User.findById(userId).populate('cart');
+
+
   
       const product = await Product.findById(productId).lean().exec();
   
